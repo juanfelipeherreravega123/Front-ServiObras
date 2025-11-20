@@ -1,0 +1,92 @@
+
+    /* Fondo con imagen */
+    body {
+      height: 100vh;
+      background: url('https://wallpapers.com/images/hd/silhouetted-heavy-construction-machinery-uyqup00jn085ihqd.jpg')
+        no-repeat center center/cover;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .verify-box {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 40px;
+      text-align: center;
+      width: 400px;
+    }
+
+    h2 {
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    p {
+      color: #ddd;
+      margin-bottom: 25px;
+    }
+
+    /* Estilo de los cuadros de verificación */
+    .code-inputs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .code-inputs input {
+      width: 50px;
+      height: 55px;
+      text-align: center;
+      font-size: 1.5rem;
+      border: none;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      outline: none;
+    }
+
+    .code-inputs input:focus {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-orange {
+      background-color: #ff6b00;
+      border: none;
+      color: #fff;
+      width: 100%;
+      font-weight: 600;
+      padding: 10px;
+      transition: background 0.3s ease;
+    }
+
+    .btn-orange:hover {
+      background-color: #ff8533;
+    }
+
+    .resend-link {
+      margin-top: 20px;
+      color: #ffb366;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .resend-link:hover {
+      color: #ffa64d;
+    }

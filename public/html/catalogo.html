@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ServiObras | Construcción y Mantenimiento</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <!-- ✅ Tu hoja de estilos -->
+  <link href="/css/estilo-catalogo.css" rel="stylesheet">
+
+  <!-- Icono -->
+  <link rel="icon" type="image/png" href="/img/logo.png">
+</head>
+
+
+<body onload="cargarProductos()">
+
+  <!-- Top Bar -->
+  <div class="top-bar d-flex justify-content-center justify-content-md-between align-items-center px-4 py-2">
+    <div class="d-none d-md-flex align-items-center gap-3 text-secondary small">
+      <span><i class="bi bi-geo-alt-fill text-success me-1"></i> Universidad Piloto de Colombia</span>
+      <span><i class="bi bi-envelope-fill text-success me-1"></i> comercial@miempresa.com</span>
+      <span><i class="bi bi-telephone-fill text-success me-1"></i> (+57) 320 336 9339</span>
+    </div>
+    <div class="social-icons d-flex gap-3">
+      <a href="#" class="text-success"><i class="bi bi-facebook"></i></a>
+      <a href="#" class="text-success"><i class="bi bi-instagram"></i></a>
+      <a href="#" class="text-success"><i class="bi bi-linkedin"></i></a>
+      <a href="#" class="text-success"><i class="bi bi-whatsapp"></i></a>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light px-4">
+    <img src="/img/logo.png" alt="Logo" width="50" class="me-2">
+    <a class="navbar-brand fw-bold text-success" href="/html/index.html">ServiObras</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="/html/catalogo.html">Catálogo</a></li>
+          <li class="nav-item"><a class="nav-link" href="/html/carrito.html">Carrito</a></li>
+          <li class="nav-item"><a class="nav-link" href="/html/cotizar.html">Cotizar</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/html/factura.html">Factura</a></li>
+        <li class="nav-item"><a class="nav-link btn-green" href="/html/login.html">Cerrar Sesion</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>¡Bienvenido a ServiObras!<br>Gracias por confiar en nosotros.</h1>
+  </section>
+
+  <!-- Productos destacados -->
+  <section id="productos" class="container">
+    <h2 class="section-title">Productos destacados</h2>
+
+    <div class="row justify-content-center">
+
+      <!-- Arena de Río -->
+      <div class="col-md-4 mb-5">
+        <div class="card">
+          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/Diseno-sin-titulo-16.png" alt="Producto">
+          <div class="card-body">
+            <h5>Arena de Río</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grava 1/2 -->
+      <div class="col-md-4 mb-5">
+        <div class="card">
+          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/GRAVILLA-FINA.png" alt="Producto">
+          <div class="card-body">
+            <h5>Grava 1/2</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arena de Peña -->
+      <div class="col-md-4 mb-5">
+        <div class="card">
+          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/arenapena.png" alt="Producto">
+          <div class="card-body">
+            <h5>Arena de Peña</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arena semi pozo -->
+      <div class="col-md-4 mb-5">
+        <div class="card">
+          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/ARENA-SEMI-LAVADA-DE-POZO.png" alt="Producto">
+          <div class="card-body">
+            <h5>Arena Semi Lavada de Pozo</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arena de Pozo en lona -->
+      <div class="col-md-4 mb-5">
+        <div class="card">
+          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/SEMI-LAVADA-DE-POZO-EN-LONA-.png" alt="Producto">
+          <div class="card-body">
+            <h5>Arena de Pozo en lona</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grava 3/4 -->
+      <div class="col-md-4 mb-5">
+        <div class="card">
+          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/GRAVILLA-COMUN.png" alt="Producto">
+          <div class="card-body">
+            <h5>Grava 3/4</h5>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Servicios -->
+<!-- Productos otros-->
+  <section id="productos" class="container">
+    <h2 class="section-title">Otros Productos</h2>
+    
+     <div class="row justify-content-center">
+
+      <!-- RECEBO B-200 -->
+      <div class="col-md-4 mb-5">
+        <div class="card">
+          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/Diseno-sin-titulo-16.png" alt="Producto">
+          <div class="card-body">
+            <h5>Recebo B-200</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECEBO B-400 -->
+      <div class="col-md-4 mb-5">
+        <div class="card">
+          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/GRAVILLA-FINA.png" alt="Producto">
+          <div class="card-body">
+            <h5>Recebo B-400</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECEBO B-600 -->
+      <div class="col-md-4 mb-5">
+        <div class="card">
+          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/arenapena.png" alt="Producto">
+          <div class="card-body">
+            <h5>Recebo B-600</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- PIEDRA RAJON -->
+      <div class="col-md-4 mb-5">
+        <div class="card">
+          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/ARENA-SEMI-LAVADA-DE-POZO.png" alt="Producto">
+          <div class="card-body">
+            <h5>Piedra Rajon</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESCOMBRO -->
+      <div class="col-md-4 mb-5">
+        <div class="card">
+          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/SEMI-LAVADA-DE-POZO-EN-LONA-.png" alt="Producto">
+          <div class="card-body">
+            <h5>Retiro de Escombro</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBBASE -->
+      <div class="col-md-4 mb-5">
+        <div class="card">
+          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/GRAVILLA-COMUN.png" alt="Producto">
+          <div class="card-body">
+            <h5>SubBase</h5>
+          </div>
+        </div>
+      </div>
+
+     </div>
+  </section>
+  <!-- Más sobre nuestra marca -->
+  <section id="marca" class="container my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <img src="/img/mula.jpeg" class="img-fluid rounded" alt="mula">
+      </div>
+      <div class="col-md-6">
+        <h2 class="fw-bold mb-3">Transporte de Carga</h2>
+        <p>
+          Ofrecemos transporte de materiales de cantera y río, asegurando entregas eficientes y seguras. Nuestra flota moviliza arena, grava, piedra y mezclas estructurales, cumpliendo con estándares de seguridad y tiempos óptimos.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Redes sociales -->
+  <section class="container text-center my-5">
+    <h2 class="section-title">Síguenos en las redes sociales</h2>
+    <div class="row g-4">
+      <div class="col-md-3"><img src="https://images.unsplash.com/photo-1616627570465-10fefda3a1dc?auto=format&fit=crop&w=700&q=80" class="img-fluid rounded" alt=""></div>
+      <div class="col-md-3"><img src="https://images.unsplash.com/photo-1616627450045-0bc8657d1df6?auto=format&fit=crop&w=700&q=80" class="img-fluid rounded" alt=""></div>
+      <div class="col-md-3"><img src="https://images.unsplash.com/photo-1616627764273-9e4c09c2b6d0?auto=format&fit=crop&w=700&q=80" class="img-fluid rounded" alt=""></div>
+      <div class="col-md-3"><img src="https://images.unsplash.com/photo-1616627671417-1b682a5f2a24?auto=format&fit=crop&w=700&q=80" class="img-fluid rounded" alt=""></div>
+    </div>
+    <button class="btn btn-green mt-4">REDES SOCIALES</button>
+  </section>
+
+  <!-- AYUDA -->
+  <section id="contacto" class="container my-5">
+    <div class="row align-items-start">
+      <div class="col-md-5">
+        <h2 class="fw-bold mb-3">¿Tienes algun problema?</h2>
+        <p>
+        Lo solucionamos con calidad, experiencia y compromiso.
+        Construimos, reparamos y transformamos tus ideas en realidad.
+        </p>
+      </div>
+      <div class="col-md-7">
+        <form>
+          <div class="row mb-3">
+            <div class="col">
+              <label class="form-label">Nombre</label>
+              <input type="text" class="form-control rounded-pill" placeholder="Nombre" />
+            </div>
+            <div class="col">
+              <label class="form-label">Apellido</label>
+              <input type="text" class="form-control rounded-pill" placeholder="Apellido" />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Correo electrónico</label>
+            <input type="email" class="form-control rounded-pill" placeholder="correo@ejemplo.com" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Mensaje</label>
+            <textarea class="form-control rounded-4" rows="3"></textarea>
+          </div>
+          <button class="btn btn-green px-4">ENVIAR</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Botones flotantes -->
+  <div class="floating-buttons">
+    <div class="contact-buttons">
+      <a href="tel:+573203369339" class="btn-float call" target="_blank">
+        <i class="bi bi-telephone-fill"></i>
+      </a>
+      <a href="https://wa.me/573203369339" class="btn-float whatsapp" target="_blank">
+        <i class="bi bi-whatsapp"></i>
+      </a>
+    </div>
+    <button class="btn-float toggle">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 ServiObras — Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    const toggleBtn = document.querySelector('.toggle');
+    const contactBtns = document.querySelector('.contact-buttons');
+    toggleBtn.addEventListener('click', () => {
+      contactBtns.classList.toggle('hidden');
+      const icon = toggleBtn.querySelector('i');
+      if (contactBtns.classList.contains('hidden')) {
+        icon.classList.replace('bi-x-lg', 'bi-chat-dots-fill');
+      } else {
+        icon.classList.replace('bi-chat-dots-fill', 'bi-x-lg');
+      }
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/carrito.js"></script>
+<script src="/js/catalogo.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (typeof cargarProductos === "function") {
+      cargarProductos();
+    }
+  });
+</script>
+</body>
+</html>

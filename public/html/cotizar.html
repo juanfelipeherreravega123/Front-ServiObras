@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cotizar - Logística Constructora De Colombia</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Icono -->
+  <link rel="icon" type="image/png" href="/img/logo.png">
+
+  <!-- Estilos -->
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .topbar {
+      background-color: #218838;
+      color: white;
+      font-size: 14px;
+      padding: 5px 0;
+    }
+    .navbar {
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .tab-content {
+      margin-top: 20px;
+    }
+    .card {
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .btn-success {
+      background-color: #218838;
+      border: none;
+    }
+    .btn-success:hover {
+      background-color: #1a6e2c;
+    }
+    .table thead {
+      background-color: #eef7f0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔹 Barra verde superior -->
+  <div class="topbar text-center">
+    📍 Universidad Piloto De Colombia &nbsp; | &nbsp; ✉️ comercial@miempresa.com &nbsp; | &nbsp; ☎️ (+57) 3203369339
+  </div>
+
+  <!-- 🔹 Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="/html/cotizar.html">
+        <img src="/img/logo.png" alt="Logo" width="50" class="me-2">
+        <span class="fw-bold text-success">LOGÍSTICA CONSTRUCTORA DE COLOMBIA</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- 🔹 Contenido -->
+  <div class="container my-5">
+    <div class="card p-4">
+      <h3 class="text-center fw-bold text-success">Cotizaciones y Vinculación</h3>
+
+      <!-- Pestañas -->
+      <ul class="nav nav-tabs mt-4" id="cotizarTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active fw-bold" id="cotizar-tab" data-bs-toggle="tab" data-bs-target="#cotizar" type="button" role="tab">Cotizar</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link fw-bold" id="empresa-tab" data-bs-toggle="tab" data-bs-target="#empresa" type="button" role="tab">Vincularse como empresa</button>
+        </li>
+      </ul>
+
+      <!-- Contenido de pestañas -->
+      <div class="tab-content" id="cotizarTabsContent">
+        <!-- 🔹 Cotizar como persona -->
+        <div class="tab-pane fade show active" id="cotizar" role="tabpanel">
+          <form class="mt-3" id="formCotizar">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Nombre completo</label>
+                <input type="text" class="form-control" id="nombre" placeholder="Tu nombre" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Número de cédula</label>
+                <input type="text" class="form-control" id="cedula" placeholder="CC" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Correo electrónico</label>
+                <input type="email" class="form-control" id="correo" placeholder="correo@ejemplo.com" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Localidad (Bogotá)</label>
+                <select class="form-select" id="localidad" required>
+                  <option value="">Selecciona una localidad</option>
+                  <option>Suba</option><option>Usaquén</option><option>Chapinero</option>
+                  <option>Santa Fe</option><option>San Cristóbal</option><option>Usme</option>
+                  <option>Tunjuelito</option><option>Bosa</option><option>Kennedy</option>
+                  <option>Fontibón</option><option>Engativá</option><option>Barrios Unidos</option>
+                  <option>Teusaquillo</option><option>Los Mártires</option><option>Antonio Nariño</option>
+                  <option>Puente Aranda</option><option>La Candelaria</option><option>Rafael Uribe Uribe</option>
+                  <option>Ciudad Bolívar</option><option>Sumapaz</option>
+                </select>
+              </div>
+              <div class="col-md-12">
+                <label class="form-label">Dirección de entrega</label>
+                <input type="text" class="form-control" id="direccion" placeholder="Calle, carrera, número" required>
+              </div>
+            </div>
+
+            <hr class="my-4">
+
+            <h5 class="fw-bold">Materiales a cotizar</h5>
+            <p class="text-muted small">Selecciona hasta 6 materiales. Para cada uno indica los metros (m³) a transportar.</p>
+
+            <div class="table-responsive">
+              <table class="table align-middle">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Material</th>
+                    <th>Mtrs³</th>
+                    <th>Precio por m³</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="tabla-materiales-persona">
+                  <!-- Filas generadas por JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="row justify-content-end mt-3">
+              <div class="col-md-4">
+                <div class="d-flex justify-content-between">
+                  <span>Subtotal:</span>
+                  <strong id="subtotalPersona">$0</strong>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span>IVA (19%):</span>
+                  <strong id="ivaPersona">$0</strong>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span>Total:</span>
+                  <strong id="totalPersona">$0</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3 mt-3">
+              <label class="form-label">Detalles adicionales</label>
+              <textarea class="form-control" id="detalles" rows="3" placeholder="Observaciones, horarios de entrega, etc."></textarea>
+            </div>
+
+            <div class="d-flex flex-wrap gap-3 mt-3">
+              <button type="button" class="btn btn-success flex-grow-1" id="btnGenerarPersona">
+                Generar cotización
+              </button>
+              <button type="button" class="btn btn-outline-secondary" id="btnPdfPersona" disabled>
+                Generar PDF
+              </button>
+              <button type="button" class="btn btn-outline-success" id="btnPagarPersona" disabled>
+                Pagar en línea
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- 🔹 Vincularse como empresa -->
+        <div class="tab-pane fade" id="empresa" role="tabpanel">
+          <form class="mt-3" id="formEmpresa">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Nombre de la empresa (Razón social)</label>
+                <input type="text" class="form-control" id="empresaNombre" placeholder="Razón social" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">NIT</label>
+                <input type="text" class="form-control" id="nit" placeholder="Número de identificación tributaria" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Correo electrónico</label>
+                <input type="email" class="form-control" id="empresaCorreo" placeholder="empresa@ejemplo.com" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="telefono" placeholder="+57 300 000 0000" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Localidad (Bogotá)</label>
+                <select class="form-select" id="empresaLocalidad" required>
+                  <option value="">Selecciona una localidad</option>
+                  <option>Suba</option><option>Usaquén</option><option>Chapinero</option>
+                  <option>Santa Fe</option><option>San Cristóbal</option><option>Usme</option>
+                  <option>Tunjuelito</option><option>Bosa</option><option>Kennedy</option>
+                  <option>Fontibón</option><option>Engativá</option><option>Barrios Unidos</option>
+                  <option>Teusaquillo</option><option>Los Mártires</option><option>Antonio Nariño</option>
+                  <option>Puente Aranda</option><option>La Candelaria</option><option>Rafael Uribe Uribe</option>
+                  <option>Ciudad Bolívar</option><option>Sumapaz</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Dirección de entrega</label>
+                <input type="text" class="form-control" id="empresaDireccion" placeholder="Calle, carrera, número" required>
+              </div>
+            </div>
+
+            <hr class="my-4">
+
+            <h5 class="fw-bold">Materiales a cotizar (empresa)</h5>
+
+            <div class="table-responsive">
+              <table class="table align-middle">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Material</th>
+                    <th>Mtrs³</th>
+                    <th>Precio por m³</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="tabla-materiales-empresa">
+                  <!-- Filas generadas por JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="row justify-content-end mt-3">
+              <div class="col-md-4">
+                <div class="d-flex justify-content-between">
+                  <span>Subtotal:</span>
+                  <strong id="subtotalEmpresa">$0</strong>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span>IVA (19%):</span>
+                  <strong id="ivaEmpresa">$0</strong>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span>Total:</span>
+                  <strong id="totalEmpresa">$0</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3 mt-3">
+              <label class="form-label">Detalles adicionales</label>
+              <textarea class="form-control" id="empresaDetalles" rows="3" placeholder="Observaciones, requisitos de la obra, etc."></textarea>
+            </div>
+
+            <div class="d-flex flex-wrap gap-3 mt-3">
+              <button type="button" class="btn btn-success flex-grow-1" id="btnGenerarEmpresa">
+                Generar cotización empresa
+              </button>
+              <button type="button" class="btn btn-outline-secondary" id="btnPdfEmpresa" disabled>
+                Generar PDF
+              </button>
+              <button type="button" class="btn btn-outline-success" id="btnPagarEmpresa" disabled>
+                Pagar en línea
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Resumen (no visible en pantalla, se usa para PDF si quieres adaptarlo) -->
+      <div id="resumenCotizacion" style="display:none;"></div>
+
+    </div>
+  </div>
+
+  <!-- jsPDF para generar el PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Lógica de cotización -->
+  <script>
+    // Algunos materiales (no toda la lista)
+    const TARIFAS = {
+      "Arena de río": 150000,
+      "Arena de peña": 150000,
+      "Mixto de río": 150000,
+      "Gravilla fina (1/2)": 150000,
+      "Gravilla común (3/4)": 150000,
+      "Recebo B-200": 150000,
+      "Recebo B-400": 150000,
+      "Piedra rajón": 150000,
+      "Retiro de escombro": 150000
+    };
+
+    const materialesLista = Object.keys(TARIFAS);
+
+    function crearFilasMateriales(tbodyId) {
+      const tbody = document.getElementById(tbodyId);
+      tbody.innerHTML = "";
+      for (let i = 1; i <= 6; i++) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${i}</td>
+          <td>
+            <select class="form-select material-select">
+              <option value="">Selecciona material</option>
+              ${materialesLista.map(m => `<option value="${m}">${m}</option>`).join("")}
+            </select>
+          </td>
+          <td><input type="number" class="form-control metros-input" min="0" step="0.01" placeholder="0"></td>
+          <td><input type="text" class="form-control precio-input" placeholder="$0" readonly></td>
+          <td><input type="text" class="form-control total-input" placeholder="$0" readonly></td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+
+    function formatearPeso(valor) {
+      return valor.toLocaleString("es-CO", {
+        style: "currency",
+        currency: "COP",
+        maximumFractionDigits: 0
+      });
+    }
+
+    function actualizarTabla(tbodyId, subtotalId, ivaId, totalId) {
+      const tbody = document.getElementById(tbodyId);
+      const filas = Array.from(tbody.querySelectorAll("tr"));
+      let subtotal = 0;
+
+      filas.forEach(tr => {
+        const material = tr.querySelector(".material-select").value;
+        const metros = parseFloat(tr.querySelector(".metros-input").value || "0");
+        const precioInput = tr.querySelector(".precio-input");
+        const totalInput = tr.querySelector(".total-input");
+
+        if (material && metros > 0) {
+          const precio = TARIFAS[material] || 0;
+          const total = precio * metros;
+          precioInput.value = formatearPeso(precio);
+          totalInput.value = formatearPeso(total);
+          subtotal += total;
+        } else {
+          precioInput.value = "$0";
+          totalInput.value = "$0";
+        }
+      });
+
+      const iva = subtotal * 0.19;
+      const total = subtotal + iva;
+
+      document.getElementById(subtotalId).textContent = formatearPeso(subtotal);
+      document.getElementById(ivaId).textContent = formatearPeso(iva);
+      document.getElementById(totalId).textContent = formatearPeso(total);
+
+      return { subtotal, iva, total };
+    }
+
+    function obtenerMaterialesDesdeTabla(tbodyId) {
+      const tbody = document.getElementById(tbodyId);
+      const filas = Array.from(tbody.querySelectorAll("tr"));
+      const materiales = [];
+
+      filas.forEach(tr => {
+        const material = tr.querySelector(".material-select").value;
+        const metros = parseFloat(tr.querySelector(".metros-input").value || "0");
+        if (!material || metros <= 0) return;
+        const precio = TARIFAS[material] || 0;
+        const total = precio * metros;
+        materiales.push({ material, metros, precio, total });
+      });
+
+      return materiales;
+    }
+
+    function guardarEnLocalStorage(datos) {
+      const historial = JSON.parse(localStorage.getItem("historialCotizaciones") || "[]");
+      historial.push(datos);
+      localStorage.setItem("historialCotizaciones", JSON.stringify(historial));
+      localStorage.setItem("cotizacionActual", JSON.stringify(datos));
+    }
+
+    async function generarPDF(datos) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: "pt", format: "letter" });
+
+      const fecha = new Date().toLocaleDateString("es-CO");
+      let y = 60;
+
+      doc.setFontSize(14);
+      doc.text("LOGÍSTICA CONSTRUCTORA DE COLOMBIA", 40, y); y += 20;
+      doc.setFontSize(11);
+      doc.text(`Bogotá D.C., ${fecha}`, 40, y); y += 20;
+
+      doc.text(`${datos.nombreLinea}`, 40, y); y += 15;
+      if (datos.identificacionLinea) {
+        doc.text(datos.identificacionLinea, 40, y); y += 15;
+      }
+      doc.text(`Localidad: ${datos.localidad}  Dirección: ${datos.direccion}`, 40, y); y += 15;
+      doc.text(`Correo: ${datos.correo}`, 40, y); y += 15;
+      if (datos.telefono) {
+        doc.text(`Teléfono: ${datos.telefono}`, 40, y); y += 15;
+      }
+
+      y += 10;
+      doc.setFontSize(12);
+      doc.text("Asunto: Cotización de materiales y transporte", 40, y); y += 25;
+
+      doc.setFontSize(11);
+      doc.text("Nos permitimos presentar la siguiente propuesta económica para el suministro de materiales:", 40, y);
+      y += 25;
+
+      // Encabezado tabla
+      doc.setFontSize(10);
+      doc.text("Material", 40, y);
+      doc.text("Mtrs³/Und", 220, y);
+      doc.text("Precio + transporte", 330, y);
+      doc.text("Total", 470, y);
+      y += 10;
+      doc.line(40, y, 560, y);
+      y += 15;
+
+      datos.materiales.forEach(m => {
+        doc.text(String(m.material), 40, y);
+        doc.text(String(m.metros), 230, y);
+        doc.text(formatearPeso(m.precio), 330, y);
+        doc.text(formatearPeso(m.total), 470, y);
+        y += 15;
+      });
+
+      y += 10;
+      doc.line(40, y, 560, y);
+      y += 15;
+
+      doc.text(`Subtotal: ${formatearPeso(datos.subtotal)}`, 330, y); y += 15;
+      doc.text(`IVA (19%): ${formatearPeso(datos.iva)}`, 330, y); y += 15;
+      doc.text(`Total: ${formatearPeso(datos.total)}`, 330, y); y += 25;
+
+      const condiciones = [
+        "• Los precios incluyen transporte, es decir, material puesto en obra.",
+        "• Los precios pueden variar según las condiciones del productor y del mercado.",
+        "• La presente cotización tiene una vigencia de 15 días.",
+        "• Los tiempos de entrega se coordinan de acuerdo con los requerimientos del cliente.",
+        "• El pago es 100% anticipado; crédito solo después de un año de relación comercial."
+      ];
+
+      condiciones.forEach(linea => {
+        doc.text(linea, 40, y);
+        y += 15;
+      });
+
+      y += 30;
+      doc.text("Atentamente,", 40, y); y += 20;
+      doc.text("ServiObras", 40, y);
+      doc.text("Área Comercial", 40, y + 15);
+
+      doc.save("cotizacion-serviobras.pdf");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Crear filas de materiales
+      crearFilasMateriales("tabla-materiales-persona");
+      crearFilasMateriales("tabla-materiales-empresa");
+
+      // Listeners de cambio para recálculo
+      document.getElementById("tabla-materiales-persona").addEventListener("input", () => {
+        actualizarTabla("tabla-materiales-persona", "subtotalPersona", "ivaPersona", "totalPersona");
+      });
+      document.getElementById("tabla-materiales-empresa").addEventListener("input", () => {
+        actualizarTabla("tabla-materiales-empresa", "subtotalEmpresa", "ivaEmpresa", "totalEmpresa");
+      });
+
+      // Persona: generar cotización
+      document.getElementById("btnGenerarPersona").addEventListener("click", () => {
+        const nombre = document.getElementById("nombre").value.trim();
+        const cedula = document.getElementById("cedula").value.trim();
+        const correo = document.getElementById("correo").value.trim();
+        const localidad = document.getElementById("localidad").value.trim();
+        const direccion = document.getElementById("direccion").value.trim();
+        const detalles = document.getElementById("detalles").value.trim();
+
+        if (!nombre || !cedula || !correo || !localidad || !direccion) {
+          alert("Por favor completa todos los campos obligatorios.");
+          return;
+        }
+
+        const materiales = obtenerMaterialesDesdeTabla("tabla-materiales-persona");
+        if (materiales.length === 0) {
+          alert("Debes agregar al menos un material con metros mayores a 0.");
+          return;
+        }
+
+        const totales = actualizarTabla("tabla-materiales-persona", "subtotalPersona", "ivaPersona", "totalPersona");
+
+        const datos = {
+          tipo: "persona",
+          nombreLinea: nombre,
+          identificacionLinea: "CC " + cedula,
+          correo,
+          localidad,
+          direccion,
+          telefono: "",
+          detalles,
+          materiales,
+          subtotal: totales.subtotal,
+          iva: totales.iva,
+          total: totales.total,
+          fecha: new Date().toISOString()
+        };
+
+        guardarEnLocalStorage(datos);
+
+        document.getElementById("btnPdfPersona").disabled = false;
+        document.getElementById("btnPagarPersona").disabled = false;
+        alert("Cotización generada correctamente.");
+      });
+
+      // Empresa: generar cotización
+      document.getElementById("btnGenerarEmpresa").addEventListener("click", () => {
+        const razon = document.getElementById("empresaNombre").value.trim();
+        const nit = document.getElementById("nit").value.trim();
+        const correo = document.getElementById("empresaCorreo").value.trim();
+        const telefono = document.getElementById("telefono").value.trim();
+        const localidad = document.getElementById("empresaLocalidad").value.trim();
+        const direccion = document.getElementById("empresaDireccion").value.trim();
+        const detalles = document.getElementById("empresaDetalles").value.trim();
+
+        if (!razon || !nit || !correo || !telefono || !localidad || !direccion) {
+          alert("Por favor completa todos los campos obligatorios.");
+          return;
+        }
+
+        const materiales = obtenerMaterialesDesdeTabla("tabla-materiales-empresa");
+        if (materiales.length === 0) {
+          alert("Debes agregar al menos un material con metros mayores a 0.");
+          return;
+        }
+
+        const totales = actualizarTabla("tabla-materiales-empresa", "subtotalEmpresa", "ivaEmpresa", "totalEmpresa");
+
+        const datos = {
+          tipo: "empresa",
+          nombreLinea: razon,
+          identificacionLinea: "NIT " + nit,
+          correo,
+          localidad,
+          direccion,
+          telefono,
+          detalles,
+          materiales,
+          subtotal: totales.subtotal,
+          iva: totales.iva,
+          total: totales.total,
+          fecha: new Date().toISOString()
+        };
+
+        guardarEnLocalStorage(datos);
+
+        document.getElementById("btnPdfEmpresa").disabled = false;
+        document.getElementById("btnPagarEmpresa").disabled = false;
+        alert("Cotización de empresa generada correctamente.");
+      });
+
+      // Botones de PDF
+      document.getElementById("btnPdfPersona").addEventListener("click", () => {
+        const datos = JSON.parse(localStorage.getItem("cotizacionActual") || "null");
+        if (!datos) { alert("Primero genera la cotización."); return; }
+        generarPDF(datos);
+      });
+
+      document.getElementById("btnPdfEmpresa").addEventListener("click", () => {
+        const datos = JSON.parse(localStorage.getItem("cotizacionActual") || "null");
+        if (!datos) { alert("Primero genera la cotización."); return; }
+        generarPDF(datos);
+      });
+
+      // Botones de pagar (por ahora solo redirigen; luego los conectas al backend / carrito)
+      document.getElementById("btnPagarPersona").addEventListener("click", () => {
+        window.location.href = "/html/factura.html";
+      });
+      document.getElementById("btnPagarEmpresa").addEventListener("click", () => {
+        window.location.href = "/html/factura.html";
+      });
+    });
+  </script>
+
+  <!-- (Opcional) Archivo JS externo si luego quieres mover esta lógica -->
+  <!-- <script src="/js/cotizar.js"></script> -->
+</body>
+</html>
+
