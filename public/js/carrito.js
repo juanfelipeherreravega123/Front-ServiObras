@@ -30,4 +30,3 @@ async function agregarCarrito(productoId) {
     alert("Producto agregado al carrito");
 }
 
-

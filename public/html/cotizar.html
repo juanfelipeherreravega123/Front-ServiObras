@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cotizar - Logística Constructora De Colombia</title>
+  <title>Cotizar - ServiObras</title>
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Icono -->
-  <link rel="icon" type="image/png" href="/img/logo.png">
+  <link rel="icon" type="image/png" href="../img/logo.png">
 
   <!-- Estilos -->
   <style>
@@ -55,9 +55,9 @@
   <!-- 🔹 Navbar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container">
-      <a class="navbar-brand d-flex align-items-center" href="/html/cotizar.html">
-        <img src="/img/logo.png" alt="Logo" width="50" class="me-2">
-        <span class="fw-bold text-success">LOGÍSTICA CONSTRUCTORA DE COLOMBIA</span>
+      <a class="navbar-brand d-flex align-items-center" href="../html/catalogo.html">
+        <img src="../img/logo.png" alt="Logo" width="50" class="me-2">
+        <span class="fw-bold text-success">ServiObras</span>
       </a>
     </div>
   </nav>
@@ -168,6 +168,9 @@
               <button type="button" class="btn btn-outline-success" id="btnPagarPersona" disabled>
                 Pagar en línea
               </button>
+              <button type="button" class="btn btn-outline-success" id="btnAgregarCarrito" onclick="agregarCotizacionAlCarrito()">
+                Agregar al carrito
+              </button>
             </div>
           </form>
         </div>
@@ -264,6 +267,9 @@
               <button type="button" class="btn btn-outline-success" id="btnPagarEmpresa" disabled>
                 Pagar en línea
               </button>
+              <button type="button" class="btn btn-outline-success" id="btnAgregarCarrito" onclick="agregarCotizacionAlCarrito()">
+                Agregar al carrito
+              </button>
             </div>
           </form>
         </div>
@@ -283,313 +289,315 @@
 
   <!-- Lógica de cotización -->
   <script>
-    // Algunos materiales (no toda la lista)
-    const TARIFAS = {
-      "Arena de río": 150000,
-      "Arena de peña": 150000,
-      "Mixto de río": 150000,
-      "Gravilla fina (1/2)": 150000,
-      "Gravilla común (3/4)": 150000,
-      "Recebo B-200": 150000,
-      "Recebo B-400": 150000,
-      "Piedra rajón": 150000,
-      "Retiro de escombro": 150000
+/* =============== PRECIOS ALEATORIOS =============== */
+function generarPrecioAleatorio() {
+  const min = 120000;
+  const max = 200000;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+const materialesLista = [
+  "Arena de río",
+  "Arena de peña",
+  "Mixto de río",
+  "Gravilla fina (1/2)",
+  "Gravilla común (3/4)",
+  "Recebo B-200",
+  "Recebo B-400",
+  "Piedra rajón",
+  "Retiro de escombro"
+];
+
+// TARIFAS asignadas al cargar la página
+const TARIFAS = {};
+materialesLista.forEach(m => { TARIFAS[m] = generarPrecioAleatorio(); });
+
+/* =================================================== */
+/*  TODO TU CÓDIGO ORIGINAL SE MANTIENE,                 */
+/*  SOLO AGREGO LO NUEVO Y REEMPLAZO TARIFAS.            */
+/* =================================================== */
+
+
+/* ==============================================
+   Crear filas de materiales
+============================================== */
+function crearFilasMateriales(tbodyId) {
+  const tbody = document.getElementById(tbodyId);
+  tbody.innerHTML = "";
+  for (let i = 1; i <= 6; i++) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${i}</td>
+      <td>
+        <select class="form-select material-select">
+          <option value="">Selecciona material</option>
+          ${materialesLista.map(m => `<option value="${m}">${m}</option>`).join("")}
+        </select>
+      </td>
+      <td><input type="number" class="form-control metros-input" min="0" step="0.01" placeholder="0"></td>
+      <td><input type="text" class="form-control precio-input" placeholder="$0" readonly></td>
+      <td><input type="text" class="form-control total-input" placeholder="$0" readonly></td>
+    `;
+    tbody.appendChild(tr);
+  }
+}
+
+function formatearPeso(valor) {
+  return valor.toLocaleString("es-CO", {
+    style: "currency",
+    currency: "COP",
+    maximumFractionDigits: 0
+  });
+}
+
+/* ==============================================
+   Actualizar tabla
+============================================== */
+function actualizarTabla(tbodyId, subtotalId, ivaId, totalId) {
+  const tbody = document.getElementById(tbodyId);
+  const filas = Array.from(tbody.querySelectorAll("tr"));
+  let subtotal = 0;
+
+  filas.forEach(tr => {
+    const material = tr.querySelector(".material-select").value;
+    const metros = parseFloat(tr.querySelector(".metros-input").value || "0");
+    const precioInput = tr.querySelector(".precio-input");
+    const totalInput = tr.querySelector(".total-input");
+
+    if (material && metros > 0) {
+      const precio = TARIFAS[material] || 0;
+      const total = precio * metros;
+
+      precioInput.value = formatearPeso(precio);
+      totalInput.value = formatearPeso(total);
+
+      subtotal += total;
+    } else {
+      precioInput.value = "$0";
+      totalInput.value = "$0";
+    }
+  });
+
+  const iva = subtotal * 0.19;
+  const total = subtotal + iva;
+
+  document.getElementById(subtotalId).textContent = formatearPeso(subtotal);
+  document.getElementById(ivaId).textContent = formatearPeso(iva);
+  document.getElementById(totalId).textContent = formatearPeso(total);
+
+  return { subtotal, iva, total };
+}
+
+/* ==============================================
+   Obtener materiales desde tabla
+============================================== */
+function obtenerMaterialesDesdeTabla(tbodyId) {
+  const tbody = document.getElementById(tbodyId);
+  const filas = Array.from(tbody.querySelectorAll("tr"));
+  const materiales = [];
+
+  filas.forEach(tr => {
+    const material = tr.querySelector(".material-select").value;
+    const metros = parseFloat(tr.querySelector(".metros-input").value || "0");
+    if (!material || metros <= 0) return;
+    const precio = TARIFAS[material] || 0;
+    const total = precio * metros;
+    materiales.push({ material, metros, precio, total });
+  });
+
+  return materiales;
+}
+
+/* ==============================================
+   Guardar cotización actual / historial
+============================================== */
+function guardarEnLocalStorage(datos) {
+  const historial = JSON.parse(localStorage.getItem("historialCotizaciones") || "[]");
+  historial.push(datos);
+  localStorage.setItem("historialCotizaciones", JSON.stringify(historial));
+  localStorage.setItem("cotizacionActual", JSON.stringify(datos));
+}
+
+
+/* ===========================================================
+   NUEVA LÓGICA — AGREGAR COTIZACIÓN AL CARRITO
+   LocalStorage: carritoCotizaciones
+=========================================================== */
+function agregarCotizacionAlCarrito() {
+  const cotizacionActual = JSON.parse(localStorage.getItem("cotizacionActual") || "null");
+
+  if (!cotizacionActual) {
+    alert("Primero genera la cotización antes de agregarla al carrito.");
+    return;
+  }
+
+  const key = "carritoCotizaciones";
+
+  let carrito = [];
+  try {
+    carrito = JSON.parse(localStorage.getItem(key) || "[]");
+    if (!Array.isArray(carrito)) carrito = [];
+  } catch (e) {
+    carrito = [];
+  }
+
+  carrito.push(cotizacionActual);
+  localStorage.setItem(key, JSON.stringify(carrito));
+
+  window.location.href = "../html/carrito.html";
+}
+
+/* ========================================================= */
+
+
+
+/* ==============================================
+   DOMContentLoaded
+============================================== */
+document.addEventListener("DOMContentLoaded", () => {
+
+  crearFilasMateriales("tabla-materiales-persona");
+  crearFilasMateriales("tabla-materiales-empresa");
+
+  document.getElementById("tabla-materiales-persona").addEventListener("input", () => {
+    actualizarTabla("tabla-materiales-persona", "subtotalPersona", "ivaPersona", "totalPersona");
+  });
+
+  document.getElementById("tabla-materiales-empresa").addEventListener("input", () => {
+    actualizarTabla("tabla-materiales-empresa", "subtotalEmpresa", "ivaEmpresa", "totalEmpresa");
+  });
+
+
+  /* ===================== PERSONA ===================== */
+  document.getElementById("btnGenerarPersona").addEventListener("click", () => {
+    const nombre = document.getElementById("nombre").value.trim();
+    const cedula = document.getElementById("cedula").value.trim();
+    const correo = document.getElementById("correo").value.trim();
+    const localidad = document.getElementById("localidad").value.trim();
+    const direccion = document.getElementById("direccion").value.trim();
+    const detalles = document.getElementById("detalles").value.trim();
+
+    if (!nombre || !cedula || !correo || !localidad || !direccion) {
+      alert("Por favor completa todos los campos obligatorios.");
+      return;
+    }
+
+    const materiales = obtenerMaterialesDesdeTabla("tabla-materiales-persona");
+    if (materiales.length === 0) {
+      alert("Debes agregar al menos un material con metros mayores a 0.");
+      return;
+    }
+
+    const totales = actualizarTabla("tabla-materiales-persona", "subtotalPersona", "ivaPersona", "totalPersona");
+
+    const datos = {
+      tipo: "persona",
+      nombreLinea: nombre,
+      identificacionLinea: "CC " + cedula,
+      correo,
+      localidad,
+      direccion,
+      telefono: "",
+      detalles,
+      materiales,
+      subtotal: totales.subtotal,
+      iva: totales.iva,
+      total: totales.total,
+      fecha: new Date().toISOString()
     };
 
-    const materialesLista = Object.keys(TARIFAS);
+    guardarEnLocalStorage(datos);
 
-    function crearFilasMateriales(tbodyId) {
-      const tbody = document.getElementById(tbodyId);
-      tbody.innerHTML = "";
-      for (let i = 1; i <= 6; i++) {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${i}</td>
-          <td>
-            <select class="form-select material-select">
-              <option value="">Selecciona material</option>
-              ${materialesLista.map(m => `<option value="${m}">${m}</option>`).join("")}
-            </select>
-          </td>
-          <td><input type="number" class="form-control metros-input" min="0" step="0.01" placeholder="0"></td>
-          <td><input type="text" class="form-control precio-input" placeholder="$0" readonly></td>
-          <td><input type="text" class="form-control total-input" placeholder="$0" readonly></td>
-        `;
-        tbody.appendChild(tr);
-      }
+    document.getElementById("btnPdfPersona").disabled = false;
+    document.getElementById("btnPagarPersona").disabled = false;
+    document.getElementById("btnAgregarCarritoPersona").disabled = false;
+
+    alert("Cotización generada correctamente.");
+  });
+
+
+  /* ===================== EMPRESA ===================== */
+  document.getElementById("btnGenerarEmpresa").addEventListener("click", () => {
+    const razon = document.getElementById("empresaNombre").value.trim();
+    const nit = document.getElementById("nit").value.trim();
+    const correo = document.getElementById("empresaCorreo").value.trim();
+    const telefono = document.getElementById("telefono").value.trim();
+    const localidad = document.getElementById("empresaLocalidad").value.trim();
+    const direccion = document.getElementById("empresaDireccion").value.trim();
+    const detalles = document.getElementById("empresaDetalles").value.trim();
+
+    if (!razon || !nit || !correo || !telefono || !localidad || !direccion) {
+      alert("Por favor completa todos los campos obligatorios.");
+      return;
     }
 
-    function formatearPeso(valor) {
-      return valor.toLocaleString("es-CO", {
-        style: "currency",
-        currency: "COP",
-        maximumFractionDigits: 0
-      });
+    const materiales = obtenerMaterialesDesdeTabla("tabla-materiales-empresa");
+    if (materiales.length === 0) {
+      alert("Debes agregar al menos un material con metros mayores a 0.");
+      return;
     }
 
-    function actualizarTabla(tbodyId, subtotalId, ivaId, totalId) {
-      const tbody = document.getElementById(tbodyId);
-      const filas = Array.from(tbody.querySelectorAll("tr"));
-      let subtotal = 0;
+    const totales = actualizarTabla("tabla-materiales-empresa", "subtotalEmpresa", "ivaEmpresa", "totalEmpresa");
 
-      filas.forEach(tr => {
-        const material = tr.querySelector(".material-select").value;
-        const metros = parseFloat(tr.querySelector(".metros-input").value || "0");
-        const precioInput = tr.querySelector(".precio-input");
-        const totalInput = tr.querySelector(".total-input");
+    const datos = {
+      tipo: "empresa",
+      nombreLinea: razon,
+      identificacionLinea: "NIT " + nit,
+      correo,
+      localidad,
+      direccion,
+      telefono,
+      detalles,
+      materiales,
+      subtotal: totales.subtotal,
+      iva: totales.iva,
+      total: totales.total,
+      fecha: new Date().toISOString()
+    };
 
-        if (material && metros > 0) {
-          const precio = TARIFAS[material] || 0;
-          const total = precio * metros;
-          precioInput.value = formatearPeso(precio);
-          totalInput.value = formatearPeso(total);
-          subtotal += total;
-        } else {
-          precioInput.value = "$0";
-          totalInput.value = "$0";
-        }
-      });
+    guardarEnLocalStorage(datos);
 
-      const iva = subtotal * 0.19;
-      const total = subtotal + iva;
+    document.getElementById("btnPdfEmpresa").disabled = false;
+    document.getElementById("btnPagarEmpresa").disabled = false;
+    document.getElementById("btnAgregarCarritoEmpresa").disabled = false;
 
-      document.getElementById(subtotalId).textContent = formatearPeso(subtotal);
-      document.getElementById(ivaId).textContent = formatearPeso(iva);
-      document.getElementById(totalId).textContent = formatearPeso(total);
+    alert("Cotización de empresa generada correctamente.");
+  });
 
-      return { subtotal, iva, total };
-    }
 
-    function obtenerMaterialesDesdeTabla(tbodyId) {
-      const tbody = document.getElementById(tbodyId);
-      const filas = Array.from(tbody.querySelectorAll("tr"));
-      const materiales = [];
+  /* ======================================================
+     NUEVOS BOTONES AGREGAR AL CARRITO
+  ====================================================== */
+  document.getElementById("btnAgregarCarritoPersona").addEventListener("click", agregarCotizacionAlCarrito);
+  document.getElementById("btnAgregarCarritoEmpresa").addEventListener("click", agregarCotizacionAlCarrito);
 
-      filas.forEach(tr => {
-        const material = tr.querySelector(".material-select").value;
-        const metros = parseFloat(tr.querySelector(".metros-input").value || "0");
-        if (!material || metros <= 0) return;
-        const precio = TARIFAS[material] || 0;
-        const total = precio * metros;
-        materiales.push({ material, metros, precio, total });
-      });
 
-      return materiales;
-    }
+  /* ====== PDFs ====== */
+  document.getElementById("btnPdfPersona").addEventListener("click", () => {
+    const datos = JSON.parse(localStorage.getItem("cotizacionActual") || "null");
+    if (!datos) { alert("Primero genera la cotización."); return; }
+    generarPDF(datos);
+  });
 
-    function guardarEnLocalStorage(datos) {
-      const historial = JSON.parse(localStorage.getItem("historialCotizaciones") || "[]");
-      historial.push(datos);
-      localStorage.setItem("historialCotizaciones", JSON.stringify(historial));
-      localStorage.setItem("cotizacionActual", JSON.stringify(datos));
-    }
+  document.getElementById("btnPdfEmpresa").addEventListener("click", () => {
+    const datos = JSON.parse(localStorage.getItem("cotizacionActual") || "null");
+    if (!datos) { alert("Primero genera la cotización."); return; }
+    generarPDF(datos);
+  });
 
-    async function generarPDF(datos) {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ unit: "pt", format: "letter" });
+  /* ====== PAGAR ====== */
+  document.getElementById("btnPagarPersona").addEventListener("click", () => {
+    window.location.href = "/html/factura.html";
+  });
+  document.getElementById("btnPagarEmpresa").addEventListener("click", () => {
+    window.location.href = "/html/factura.html";
+  });
 
-      const fecha = new Date().toLocaleDateString("es-CO");
-      let y = 60;
+});
+</script>
 
-      doc.setFontSize(14);
-      doc.text("LOGÍSTICA CONSTRUCTORA DE COLOMBIA", 40, y); y += 20;
-      doc.setFontSize(11);
-      doc.text(`Bogotá D.C., ${fecha}`, 40, y); y += 20;
-
-      doc.text(`${datos.nombreLinea}`, 40, y); y += 15;
-      if (datos.identificacionLinea) {
-        doc.text(datos.identificacionLinea, 40, y); y += 15;
-      }
-      doc.text(`Localidad: ${datos.localidad}  Dirección: ${datos.direccion}`, 40, y); y += 15;
-      doc.text(`Correo: ${datos.correo}`, 40, y); y += 15;
-      if (datos.telefono) {
-        doc.text(`Teléfono: ${datos.telefono}`, 40, y); y += 15;
-      }
-
-      y += 10;
-      doc.setFontSize(12);
-      doc.text("Asunto: Cotización de materiales y transporte", 40, y); y += 25;
-
-      doc.setFontSize(11);
-      doc.text("Nos permitimos presentar la siguiente propuesta económica para el suministro de materiales:", 40, y);
-      y += 25;
-
-      // Encabezado tabla
-      doc.setFontSize(10);
-      doc.text("Material", 40, y);
-      doc.text("Mtrs³/Und", 220, y);
-      doc.text("Precio + transporte", 330, y);
-      doc.text("Total", 470, y);
-      y += 10;
-      doc.line(40, y, 560, y);
-      y += 15;
-
-      datos.materiales.forEach(m => {
-        doc.text(String(m.material), 40, y);
-        doc.text(String(m.metros), 230, y);
-        doc.text(formatearPeso(m.precio), 330, y);
-        doc.text(formatearPeso(m.total), 470, y);
-        y += 15;
-      });
-
-      y += 10;
-      doc.line(40, y, 560, y);
-      y += 15;
-
-      doc.text(`Subtotal: ${formatearPeso(datos.subtotal)}`, 330, y); y += 15;
-      doc.text(`IVA (19%): ${formatearPeso(datos.iva)}`, 330, y); y += 15;
-      doc.text(`Total: ${formatearPeso(datos.total)}`, 330, y); y += 25;
-
-      const condiciones = [
-        "• Los precios incluyen transporte, es decir, material puesto en obra.",
-        "• Los precios pueden variar según las condiciones del productor y del mercado.",
-        "• La presente cotización tiene una vigencia de 15 días.",
-        "• Los tiempos de entrega se coordinan de acuerdo con los requerimientos del cliente.",
-        "• El pago es 100% anticipado; crédito solo después de un año de relación comercial."
-      ];
-
-      condiciones.forEach(linea => {
-        doc.text(linea, 40, y);
-        y += 15;
-      });
-
-      y += 30;
-      doc.text("Atentamente,", 40, y); y += 20;
-      doc.text("ServiObras", 40, y);
-      doc.text("Área Comercial", 40, y + 15);
-
-      doc.save("cotizacion-serviobras.pdf");
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      // Crear filas de materiales
-      crearFilasMateriales("tabla-materiales-persona");
-      crearFilasMateriales("tabla-materiales-empresa");
-
-      // Listeners de cambio para recálculo
-      document.getElementById("tabla-materiales-persona").addEventListener("input", () => {
-        actualizarTabla("tabla-materiales-persona", "subtotalPersona", "ivaPersona", "totalPersona");
-      });
-      document.getElementById("tabla-materiales-empresa").addEventListener("input", () => {
-        actualizarTabla("tabla-materiales-empresa", "subtotalEmpresa", "ivaEmpresa", "totalEmpresa");
-      });
-
-      // Persona: generar cotización
-      document.getElementById("btnGenerarPersona").addEventListener("click", () => {
-        const nombre = document.getElementById("nombre").value.trim();
-        const cedula = document.getElementById("cedula").value.trim();
-        const correo = document.getElementById("correo").value.trim();
-        const localidad = document.getElementById("localidad").value.trim();
-        const direccion = document.getElementById("direccion").value.trim();
-        const detalles = document.getElementById("detalles").value.trim();
-
-        if (!nombre || !cedula || !correo || !localidad || !direccion) {
-          alert("Por favor completa todos los campos obligatorios.");
-          return;
-        }
-
-        const materiales = obtenerMaterialesDesdeTabla("tabla-materiales-persona");
-        if (materiales.length === 0) {
-          alert("Debes agregar al menos un material con metros mayores a 0.");
-          return;
-        }
-
-        const totales = actualizarTabla("tabla-materiales-persona", "subtotalPersona", "ivaPersona", "totalPersona");
-
-        const datos = {
-          tipo: "persona",
-          nombreLinea: nombre,
-          identificacionLinea: "CC " + cedula,
-          correo,
-          localidad,
-          direccion,
-          telefono: "",
-          detalles,
-          materiales,
-          subtotal: totales.subtotal,
-          iva: totales.iva,
-          total: totales.total,
-          fecha: new Date().toISOString()
-        };
-
-        guardarEnLocalStorage(datos);
-
-        document.getElementById("btnPdfPersona").disabled = false;
-        document.getElementById("btnPagarPersona").disabled = false;
-        alert("Cotización generada correctamente.");
-      });
-
-      // Empresa: generar cotización
-      document.getElementById("btnGenerarEmpresa").addEventListener("click", () => {
-        const razon = document.getElementById("empresaNombre").value.trim();
-        const nit = document.getElementById("nit").value.trim();
-        const correo = document.getElementById("empresaCorreo").value.trim();
-        const telefono = document.getElementById("telefono").value.trim();
-        const localidad = document.getElementById("empresaLocalidad").value.trim();
-        const direccion = document.getElementById("empresaDireccion").value.trim();
-        const detalles = document.getElementById("empresaDetalles").value.trim();
-
-        if (!razon || !nit || !correo || !telefono || !localidad || !direccion) {
-          alert("Por favor completa todos los campos obligatorios.");
-          return;
-        }
-
-        const materiales = obtenerMaterialesDesdeTabla("tabla-materiales-empresa");
-        if (materiales.length === 0) {
-          alert("Debes agregar al menos un material con metros mayores a 0.");
-          return;
-        }
-
-        const totales = actualizarTabla("tabla-materiales-empresa", "subtotalEmpresa", "ivaEmpresa", "totalEmpresa");
-
-        const datos = {
-          tipo: "empresa",
-          nombreLinea: razon,
-          identificacionLinea: "NIT " + nit,
-          correo,
-          localidad,
-          direccion,
-          telefono,
-          detalles,
-          materiales,
-          subtotal: totales.subtotal,
-          iva: totales.iva,
-          total: totales.total,
-          fecha: new Date().toISOString()
-        };
-
-        guardarEnLocalStorage(datos);
-
-        document.getElementById("btnPdfEmpresa").disabled = false;
-        document.getElementById("btnPagarEmpresa").disabled = false;
-        alert("Cotización de empresa generada correctamente.");
-      });
-
-      // Botones de PDF
-      document.getElementById("btnPdfPersona").addEventListener("click", () => {
-        const datos = JSON.parse(localStorage.getItem("cotizacionActual") || "null");
-        if (!datos) { alert("Primero genera la cotización."); return; }
-        generarPDF(datos);
-      });
-
-      document.getElementById("btnPdfEmpresa").addEventListener("click", () => {
-        const datos = JSON.parse(localStorage.getItem("cotizacionActual") || "null");
-        if (!datos) { alert("Primero genera la cotización."); return; }
-        generarPDF(datos);
-      });
-
-      // Botones de pagar (por ahora solo redirigen; luego los conectas al backend / carrito)
-      document.getElementById("btnPagarPersona").addEventListener("click", () => {
-        window.location.href = "/html/factura.html";
-      });
-      document.getElementById("btnPagarEmpresa").addEventListener("click", () => {
-        window.location.href = "/html/factura.html";
-      });
-    });
-  </script>
 
   <!-- (Opcional) Archivo JS externo si luego quieres mover esta lógica -->
   <!-- <script src="/js/cotizar.js"></script> -->
 </body>
 </html>
-

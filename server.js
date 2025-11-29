@@ -2,6 +2,8 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 
+export const URL_API = "http://IP_PUBLICA";
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 

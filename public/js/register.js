@@ -1,34 +1,53 @@
+const BASE_URL = ["localhost", "127.0.0.1"].includes(window.location.hostname)
+  ? "http://localhost:8080"
+  : "https://serviobrass.com";
+
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const data = {
-        nombre: document.getElementById("nombre").value,
-        apellido: document.getElementById("apellido").value,
-        email: document.getElementById("email").value,
-        username: document.getElementById("username").value,
-        password: document.getElementById("password").value
-        
-    };
+  const nombre = document.getElementById("nombre").value.trim();
+  const apellido = document.getElementById("apellido").value.trim();
+  const username = document.getElementById("username").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const confirm = document.getElementById("confirm").value;
 
-    try {
-        const res = await fetch("http://localhost:8080/api/usuarios/registrar", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        });
+  if (!nombre || !apellido || !username || !email || !password || !confirm) {
+    alert("Completa todos los campos");
+    return;
+  }
 
-        if (res.status === 200) {
-            // Mandamos el correo al verify.html para saber qué usuario verificar
-            localStorage.setItem("pendingEmail", data.email);
-            window.location.href = `/html/verificar.html?email=${encodeURIComponent(data.email)}`;
-            return;
-        }
+  if (password !== confirm) {
+    alert("Las contraseñas no coinciden");
+    return;
+  }
 
-        const msg = await res.text();
-        alert("Error: " + msg);
+  const data = { nombre, apellido, username, email, password };
 
-    } catch (err) {
-        alert("Error de conexión con el servidor");
-        console.error(err);
+  try {
+    const res = await fetch(`${BASE_URL}/api/usuarios/registrar`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    let body = {};
+    try { body = await res.json(); } catch {}
+
+    if (res.ok) {
+      localStorage.setItem("pendingEmail", email);
+
+      const verificarUrl = window.location.hostname === "127.0.0.1"
+        ? "/public/html/verificar.html"
+        : "/html/verificar.html";
+
+      window.location.href = verificarUrl;
+    } else {
+      alert(body.error || "Error en el registro");
     }
+
+  } catch (err) {
+    console.error(err);
+    alert("No se pudo conectar con el servidor.");
+  }
 });
