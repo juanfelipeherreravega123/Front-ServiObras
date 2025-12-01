@@ -4,10 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Administrativo ServiObras</title>
+
     <link href="../css/admin.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <!-- Icono -->
     <link rel="icon" type="image/png" href="../img/logo.png">
+
+    <style>
+        /* ---------- MENÚ DESPLEGABLE USER ---------- */
+        .user {
+            position: relative;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 6px;
+            background: #f3f3f3;
+        }
+
+        .user:hover {
+            background: #eaeaea;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background: white;
+            padding: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            display: none;
+            z-index: 1000;
+            min-width: 160px;
+        }
+
+        .dropdown-menu button {
+            width: 100%;
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            text-align: left;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .dropdown-menu button:hover {
+            background: #f5f5f5;
+            color: #d9534f;
+        }
+    </style>
 </head>
 
 <body>
@@ -27,9 +73,9 @@
                 <li class="submenu">
                     <span><i class="bi bi-box-seam"></i> Inventario</span>
                     <ul>
-                        <li> Categorías </li>
-                        <li> Productos </li>
-                        <li> Almacenes </li>
+                        <li>Categorías</li>
+                        <li>Productos</li>
+                        <li>Almacenes</li>
                     </ul>
                 </li>
 
@@ -40,9 +86,9 @@
                 <li class="submenu">
                     <span><i class="bi bi-receipt-cutoff"></i> Ventas</span>
                     <ul>
-                        <li> Clientes </li>
-                        <li> Cotizaciones </li>
-                        <li> Nueva venta </li>
+                        <li>Clientes</li>
+                        <li>Cotizaciones</li>
+                        <li>Nueva venta</li>
                     </ul>
                 </li>
 
@@ -50,8 +96,8 @@
                 <li class="submenu">
                     <span><i class="bi bi-shuffle"></i> Movimientos</span>
                     <ul>
-                        <li> Entradas y Salidas </li>
-                        <li> Transferencias </li>
+                        <li>Entradas y Salidas</li>
+                        <li>Transferencias</li>
                     </ul>
                 </li>
 
@@ -68,8 +114,15 @@
         <!-- TOPBAR -->
         <header class="topbar">
             <div class="breadcrumbs">Dashboard / Tablero</div>
-            <div class="user">
-                <span>JG</span>
+
+            <!-- MENÚ USUARIO -->
+            <div class="user" id="userMenu">
+                <span id="userName">Admin ▼</span>
+
+                <!-- Dropdown -->
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <button onclick="logout()">Cerrar sesión</button>
+                </div>
             </div>
         </header>
 
@@ -131,6 +184,9 @@
         </section>
 
     </main>
+
+    <!-- SCRIPT ADMIN -->
+    <script src="../js/admin.js"></script>
 
 </body>
 </html>

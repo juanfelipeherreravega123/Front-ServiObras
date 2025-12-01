@@ -25,7 +25,7 @@ async function login() {
       if (body.error === "NO_VERIFICADO") {
         localStorage.setItem("pendingEmail", username);
 
-        const verificarUrl = ["127.0.0.1", "localhost"].includes(window.location.hostname)
+        const verificarUrl = ["localhost", "127.0.0.1"].includes(window.location.hostname)
           ? "/public/html/verificar.html"
           : "/html/verificar.html";
 
@@ -41,12 +41,23 @@ async function login() {
     localStorage.setItem("token", body.token);
     localStorage.setItem("username", body.username);
     localStorage.setItem("usuarioId", body.id_usuario);
+    localStorage.setItem("rol", body.rol);
 
-    const catalogoUrl = ["127.0.0.1", "localhost"].includes(window.location.hostname)
-      ? "/public/html/catalogo.html"
-      : "/html/catalogo.html";
+    // Normalizar rol (admin / cliente)
+    const rol = (body.rol || "").toLowerCase();
 
-    window.location.href = catalogoUrl;
+    // Rutas según entorno
+    const isLocal = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+
+    const catalogoUrl = isLocal ? "../html/catalogo.html" : "/html/catalogo.html";
+    const adminUrl   = isLocal ? "../html/administrador.html" : "/html/administrador.html";
+
+    // Redirección según rol
+    if (rol === "admin") {
+      window.location.href = adminUrl;
+    } else {
+      window.location.href = catalogoUrl;
+    }
 
   } catch (err) {
     console.error("ERROR LOGIN:", err);
@@ -58,9 +69,16 @@ window.login = login;
 
 // Si ya hay sesión, saltar login
 if (localStorage.getItem("token")) {
-  const catalogoUrl = ["127.0.0.1", "localhost"].includes(window.location.hostname)
-    ? "/public/html/catalogo.html"
-    : "/html/catalogo.html";
 
-  window.location.href = catalogoUrl;
+  const rol = (localStorage.getItem("rol") || "").toLowerCase();
+  const isLocal = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+
+  const catalogoUrl = isLocal ? "../html/catalogo.html" : "/html/catalogo.html";
+  const adminUrl   = isLocal ? "../html/administrador.html" : "/html/administrador.html";
+
+  if (rol === "admin") {
+    window.location.href = adminUrl;
+  } else {
+    window.location.href = catalogoUrl;
+  }
 }

@@ -6,7 +6,7 @@
   const username = localStorage.getItem("username");
 
   if (!token || !username) {
-    window.location.href = "/public/html/login.html";
+    window.location.href = "../html/login.html";
   }
 })();
 
@@ -25,7 +25,7 @@ async function cargarProductos() {
     const token = localStorage.getItem("token");
     if (!token) {
       alert("Debes iniciar sesión");
-      window.location.href = "/public/html/login.html";
+      window.location.href = "../html/login.html";
       return;
     }
 
@@ -84,7 +84,7 @@ function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("username");
   localStorage.removeItem("usuarioId");
-  window.location.href = "/public/html/login.html";
+  window.location.href = "../html/login.html";
 }
 
 window.cargarProductos = cargarProductos;

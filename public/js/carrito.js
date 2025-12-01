@@ -3,7 +3,7 @@ async function agregarCarrito(productoId) {
 
     if (!usuarioId) {
         alert("Debes iniciar sesión primero");
-        window.location.href = "/html/login.html";
+        window.location.href = "../html/login.html";
         return;
     }
 
