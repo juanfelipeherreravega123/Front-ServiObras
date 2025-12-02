@@ -4,7 +4,7 @@ async function pagar() {
 
     const data = { cotizacionId, usuarioId };
 
-    const response = await fetch("http://localhost:8080/api/facturas", {
+    const response = await fetch("https://serviobrass.com/api/facturas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)

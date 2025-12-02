@@ -1,23 +1,24 @@
-import express from "express";
-import path from "path";
-import { fileURLToPath } from "url";
+const express = require("express");
+const path = require("path");
 
-export const URL_API = "http://IP_PUBLICA";
+// 👉 Cambia esto por tu IP pública o dominio:
+const URL_API = "https://serviobrass.com";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Necesario para poder usar __dirname en ES Modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// __dirname en CommonJS funciona directo
+const publicPath = path.join(__dirname, "public");
 
-// Carpeta pública
-app.use(express.static(path.join(__dirname, "public")));
+// Servir archivos estáticos
+app.use(express.static(publicPath));
 
+// Ruta principal → login
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/html/index.html"));
+  res.sendFile(path.join(publicPath, "html", "index.html"));
 });
 
+// Levantar servidor
 app.listen(PORT, () => {
   console.log(`🌐 Frontend disponible en: http://localhost:${PORT}`);
 });

@@ -1,5 +1,5 @@
 const BASE_URL = window.location.origin.includes("5500")
-  ? "http://localhost:8080"
+  ? "https://serviobrass.com"
   : window.location.origin;
 
 async function cargarHistorial() {

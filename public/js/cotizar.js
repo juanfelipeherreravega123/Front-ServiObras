@@ -1,63 +1,81 @@
-// Función para generar la cotización
+// =========================
+// GENERAR COTIZACIÓN
+// =========================
 async function generarCotizacion() {
-    // Obtener los datos necesarios desde el localStorage
     const usuarioId = localStorage.getItem("usuarioId");
     const carritoId = localStorage.getItem("carritoId");
 
-    // Crear los datos para la solicitud
+    if (!usuarioId || !carritoId) {
+        alert("No se encontró el usuario o el carrito.");
+        return;
+    }
+
     const data = { usuarioId, carritoId };
 
     try {
-        // Realizar la solicitud POST para generar la cotización
-        const response = await fetch("http://localhost:8080/api/cotizaciones", {
+        const response = await fetch("https://serviobrass.com/api/cotizaciones", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
+            body: JSON.stringify(data)
         });
 
-        // Verificar si la respuesta es exitosa
         if (!response.ok) {
             throw new Error("Error al generar la cotización.");
         }
 
-        // Obtener la cotización generada desde la respuesta
         const cot = await response.json();
-        localStorage.setItem("cotizacionId", cot.id); // Guardar el ID de la cotización
+        localStorage.setItem("cotizacionId", cot.id);
 
-        alert("Cotización generada");
+        // Ahora la mandamos al carrito
+        await agregarCotizacionAlCarrito(cot.id, usuarioId);
 
-        // Llamar a la función para agregar la cotización al carrito
-        agregarCotizacionAlCarrito(cot.id, usuarioId);
     } catch (error) {
         console.error("Error:", error);
         alert("Hubo un problema al generar la cotización.");
     }
 }
 
-// Función para agregar la cotización al carrito
+
+// =========================
+// AGREGAR COTIZACIÓN AL CARRITO
+// =========================
 async function agregarCotizacionAlCarrito(cotizacionId, usuarioId) {
     try {
-        // Realizar la solicitud POST al backend para agregar la cotización al carrito
-        const response = await fetch("http://localhost:8080/api/cotizaciones/${cotizacionId}/llevar-a-carrito", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ usuarioId }),
-        });
+        const response = await fetch(
+            `https://serviobrass.com/api/cotizaciones/${cotizacionId}/llevar-a-carrito`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ usuarioId })
+            }
+        );
 
-        // Verificar si la respuesta es exitosa
         if (!response.ok) {
-            throw new Error("Error al agregar la cotización al carrito.");
+            throw new Error("Error al agregar la cotización al carrito");
         }
 
-        alert("Cotización agregada al carrito");
-        window.location.href = "../html/carrito.html"; // Redirigir al carrito
+        window.location.href = "/html/carrito.html";
+
     } catch (error) {
-        console.error("Error:", error);
+        console.error(error);
         alert("Hubo un problema al agregar la cotización al carrito.");
     }
 }
 
-// Asegurarse de que el evento de generación de cotización esté bien asignado al botón
-document.getElementById("btnGenerarCotizacion").addEventListener("click", generarCotizacion);
+
+
+// =========================
+// LISTENER DEL BOTÓN
+// =========================
+document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("agregar-carrito");
+
+    if (!btn) {
+        console.error("No se encontró el botón #agregar-carrito");
+        return;
+    }
+
+    btn.addEventListener("click", () => {
+        generarCotizacion();
+    });
+});

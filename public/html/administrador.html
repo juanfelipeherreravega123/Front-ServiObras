@@ -7,8 +7,6 @@
 
     <link href="../css/admin.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
-    <!-- Icono -->
     <link rel="icon" type="image/png" href="../img/logo.png">
 
     <style>
@@ -53,6 +51,101 @@
             background: #f5f5f5;
             color: #d9534f;
         }
+
+        /* ---------- FORMULARIO CREAR USUARIO ---------- */
+        #crearUsuarioSection {
+            background: #fff;
+            margin: 25px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            display: none;
+            position: relative;
+        }
+
+        #crearUsuarioSection form input,
+        #crearUsuarioSection form select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        #crearUsuarioSection button {
+            padding: 10px 20px;
+            background: #2e7d32;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        #crearUsuarioSection button:hover {
+            background: #27662a;
+        }
+
+        /* ---------- BOTÓN X ---------- */
+        .cerrar-crear-usuario,
+        .cerrar-eliminar-usuario {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .cerrar-crear-usuario:hover,
+        .cerrar-eliminar-usuario:hover {
+            color: #d9534f;
+        }
+
+        /* ---------- SECCIÓN ELIMINAR USUARIOS ---------- */
+        #eliminarUsuarioSection {
+            background: #fff;
+            margin: 25px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            display: none;
+            position: relative;
+        }
+
+        #buscarUsuario {
+            width: 250px;
+            padding: 8px 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        #tablaUsuarios table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        #tablaUsuarios th,
+        #tablaUsuarios td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .btn-eliminar {
+            padding: 6px 12px;
+            background: #c62828;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-eliminar:hover {
+            background: #b71c1c;
+        }
     </style>
 </head>
 
@@ -61,7 +154,7 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <img src="../img/logo.png" alt="Logo" width="50" class="me-2">  
+            <img src="../img/logo.png" alt="Logo" width="50">  
             <h2>ServiObras</h2>
         </div>
 
@@ -69,7 +162,7 @@
             <ul>
                 <li class="active"><i class="bi bi-speedometer2"></i> Dashboard</li>
 
-                <li class="menu-title">Gestión de Inventario</li>
+                <li class="menu-title">GESTIÓN DE INVENTARIO</li>
                 <li class="submenu">
                     <span><i class="bi bi-box-seam"></i> Inventario</span>
                     <ul>
@@ -79,10 +172,28 @@
                     </ul>
                 </li>
 
-                <li class="menu-title">Gestión de Compras</li>
+                <li class="menu-title">GESTIÓN DE USUARIOS</li>
+                <li class="submenu">
+                    <span><i class="bi bi-people"></i> Usuarios</span>
+                    <ul>
+                        <li id="crearUsuarioBtn">Crear</li>
+                        <li id="eliminarUsuarioBtn">Eliminar</li>
+                    </ul>
+                </li>
+
+               <li class="menu-title">GESTIÓN DE SUGERENCIAS</li>
+               <li class="submenu">
+               <span><i class="bi bi-receipt-cutoff"></i> Sugerencias</span>
+               <ul>
+                  <li id="btnSugerencias">Revisión</li>   <!-- 👈 AGREGAR ESTE ID -->
+                </ul>
+                </li>
+
+
+                <li class="menu-title">GESTIÓN DE COMPRAS</li>
                 <li><i class="bi bi-cart-check"></i> Compras</li>
 
-                <li class="menu-title">Gestión de Ventas</li>
+                <li class="menu-title">GESTIÓN DE VENTAS</li>
                 <li class="submenu">
                     <span><i class="bi bi-receipt-cutoff"></i> Ventas</span>
                     <ul>
@@ -92,7 +203,7 @@
                     </ul>
                 </li>
 
-                <li class="menu-title">Control de Movimientos</li>
+                <li class="menu-title">CONTROL DE MOVIMIENTOS</li>
                 <li class="submenu">
                     <span><i class="bi bi-shuffle"></i> Movimientos</span>
                     <ul>
@@ -101,7 +212,7 @@
                     </ul>
                 </li>
 
-                <li class="menu-title">Reportes</li>
+                <li class="menu-title">REPORTES</li>
                 <li><i class="bi bi-graph-up-arrow"></i> Reportes</li>
             </ul>
         </nav>
@@ -115,19 +226,89 @@
         <header class="topbar">
             <div class="breadcrumbs">Dashboard / Tablero</div>
 
-            <!-- MENÚ USUARIO -->
             <div class="user" id="userMenu">
                 <span id="userName">Admin ▼</span>
 
-                <!-- Dropdown -->
                 <div class="dropdown-menu" id="dropdownMenu">
                     <button onclick="logout()">Cerrar sesión</button>
                 </div>
             </div>
         </header>
 
-        <!-- DASHBOARD CARDS -->
-        <section class="cards">
+        <!-- FORMULARIO CREAR USUARIO -->
+        <section id="crearUsuarioSection">
+            <div class="cerrar-crear-usuario" id="cerrarCrearUsuario">✖</div>
+            <h2>Crear Usuario</h2>
+
+            <form id="formCrearUsuario">
+                <input type="text" name="nombre" placeholder="Nombre" required>
+                <input type="text" name="apellido" placeholder="Apellido" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="text" name="username" placeholder="Nombre de usuario" required>
+
+                <select name="rol" required>
+                    <option value="">Seleccione un rol</option>
+                    <option value="admin">Admin</option>
+                    <option value="cliente">Cliente</option>
+                </select>
+
+                <input type="password" name="password" placeholder="Contraseña" required>
+
+                <button type="submit">Crear Usuario</button>
+            </form>
+        </section>
+
+        <!-- NUEVA SECCIÓN: ELIMINAR USUARIOS -->
+        <section id="eliminarUsuarioSection">
+            <div class="cerrar-eliminar-usuario" id="cerrarEliminarUsuario">✖</div>
+            <h2>Eliminar Usuario</h2>
+
+            <input type="text" id="buscarUsuario" placeholder="Buscar usuario... 🔍">
+
+            <div id="tablaUsuarios">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Acción</th>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Usuario</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usuariosBody">
+                        <!-- Aquí JS insertará los usuarios -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SUGERENCIAS -->
+
+        <section id="sugerenciasSection" style="display:none;">
+    <h2>Sugerencias Recibidas</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Mensaje</th>
+                <th>Origen</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="sugerenciasBody"></tbody>
+    </table>
+</section>
+
+
+        <!-- DASHBOARD -->
+        <section class="cards" id="dashboardSection">
             <div class="card green">
                 <h3>VENTAS</h3>
                 <p>63.90</p>
@@ -149,7 +330,7 @@
             </div>
         </section>
 
-        <!-- TABLE EXAMPLE -->
+        <!-- TABLA PRODUCTOS -->
         <section class="table-section">
             <h2>Productos</h2>
 
@@ -183,10 +364,39 @@
             </table>
         </section>
 
+        <!-- ======== COSAS AÑADIDAS PARA QUE FUNCIONE TU JS ======== -->
+
+        <!-- input oculto que tu js usa -->
+        <input type="hidden" id="buscarUsuarioInput">
+
+        <!-- tbody extra requerido por tu js -->
+        <tbody id="tablaUsuariosBody" style="display:none;"></tbody>
+
+        <!-- MODAL DE CONFIRMACIÓN -->
+        <div id="modalConfirmacion" 
+            style="display:none; position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.4); justify-content:center; align-items:center; z-index:9999;">
+
+            <div style="background:#fff; padding:20px; border-radius:10px; width:350px; text-align:center;">
+                
+                <p id="modalTexto"></p>
+
+                <button id="btnConfirmarEliminar"
+                    style="padding:10px 20px; background:#c62828; color:#fff; border:none;
+                    border-radius:6px; margin-right:10px;">
+                    Eliminar
+                </button>
+
+                <button onclick="cerrarModal()"
+                    style="padding:10px 20px; background:#777; color:#fff; border:none;
+                    border-radius:6px;">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+
     </main>
-
-    <!-- SCRIPT ADMIN -->
+    <script src="../js/config.js"></script>     <!-- define BASE_URL -->
     <script src="../js/admin.js"></script>
-
 </body>
 </html>

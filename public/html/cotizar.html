@@ -9,7 +9,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Icono -->
-  <link rel="icon" type="image/png" href="../img/logo.png">
+  <link rel="icon" type="image/png" href="/img/logo.png">
 
   <!-- Estilos -->
   <style>
@@ -56,7 +56,7 @@
   <nav class="navbar navbar-expand-lg">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="../html/catalogo.html">
-        <img src="../img/logo.png" alt="Logo" width="50" class="me-2">
+        <img src="/img/logo.png" alt="Logo" width="50" class="me-2">
         <span class="fw-bold text-success">ServiObras</span>
       </a>
     </div>
@@ -168,9 +168,10 @@
               <button type="button" class="btn btn-outline-success" id="btnPagarPersona" disabled>
                 Pagar en línea
               </button>
-              <button type="button" class="btn btn-outline-success" id="btnAgregarCarrito" onclick="agregarCotizacionAlCarrito()">
+              <button type="button" class="btn btn-outline-success" id="btnAgregarCarritoPersona">
                 Agregar al carrito
               </button>
+
             </div>
           </form>
         </div>
@@ -267,9 +268,10 @@
               <button type="button" class="btn btn-outline-success" id="btnPagarEmpresa" disabled>
                 Pagar en línea
               </button>
-              <button type="button" class="btn btn-outline-success" id="btnAgregarCarrito" onclick="agregarCotizacionAlCarrito()">
+              <button type="button" class="btn btn-outline-success" id="btnAgregarCarritoEmpresa">
                 Agregar al carrito
               </button>
+
             </div>
           </form>
         </div>
@@ -423,32 +425,63 @@ function guardarEnLocalStorage(datos) {
    NUEVA LÓGICA — AGREGAR COTIZACIÓN AL CARRITO
    LocalStorage: carritoCotizaciones
 =========================================================== */
-function agregarCotizacionAlCarrito() {
-  const cotizacionActual = JSON.parse(localStorage.getItem("cotizacionActual") || "null");
 
-  if (!cotizacionActual) {
-    alert("Primero genera la cotización antes de agregarla al carrito.");
+async function agregarCotizacionAlCarrito() {
+  const datos = JSON.parse(localStorage.getItem("cotizacionActual") || "null");
+
+  if (!datos) {
+    alert("Primero genera la cotización.");
     return;
   }
 
-  const key = "carritoCotizaciones";
+  const usuarioId = localStorage.getItem("usuarioId");
+  const carritoId = localStorage.getItem("carritoId");
 
-  let carrito = [];
-  try {
-    carrito = JSON.parse(localStorage.getItem(key) || "[]");
-    if (!Array.isArray(carrito)) carrito = [];
-  } catch (e) {
-    carrito = [];
+  if (!usuarioId) {
+    alert("No se encontró el usuario. Inicia sesión o configura usuarioId en localStorage.");
+    return;
   }
 
-  carrito.push(cotizacionActual);
-  localStorage.setItem(key, JSON.stringify(carrito));
+  // 1. Crear la cotización en el backend
+  let cotizacionCreada;
+  try {
+    const response = await fetch("http://localhost:8080/api/cotizaciones", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        usuarioId,
+        carritoId,
+        total: datos.total,
+        iva: datos.iva,
+        subtotal: datos.subtotal,
+        descripcion: "Cotización enviada desde frontend",
+        fecha: datos.fecha,
+        materiales: datos.materiales
+      })
+    });
 
-  window.location.href = "../html/carrito.html";
+    cotizacionCreada = await response.json();
+    localStorage.setItem("cotizacionId", cotizacionCreada.id);
+  } catch (err) {
+    console.error(err);
+    alert("Error al guardar la cotización en el servidor.");
+    return;
+  }
+
+  // 2. Mover la cotización al carrito
+  try {
+    await fetch(`http://localhost:8080/api/carrito/${cotizacionCreada.id}/llevar-a-carrito?usuarioId=${usuarioId}`, {
+      method: "POST"
+    });
+  } catch (err) {
+    console.error(err);
+    alert("Error al llevar la cotización al carrito.");
+    return;
+  }
+
+  // 3. Redirigir al carrito
+  window.location.href = "/html/carrito.html";
 }
-
-/* ========================================================= */
-
 
 
 /* ==============================================
@@ -585,19 +618,49 @@ document.addEventListener("DOMContentLoaded", () => {
     generarPDF(datos);
   });
 
-  /* ====== PAGAR ====== */
-  document.getElementById("btnPagarPersona").addEventListener("click", () => {
-    window.location.href = "/html/factura.html";
-  });
-  document.getElementById("btnPagarEmpresa").addEventListener("click", () => {
-    window.location.href = "/html/factura.html";
-  });
+async function llevarCotizacionAlCarrito() {
+  const datos = JSON.parse(localStorage.getItem("cotizacionActual") || "null");
+  if (!datos) {
+    alert("Primero genera la cotización.");
+    return;
+  }
+
+  // 1. Opcional: sincronizar con backend (crear cotización en BD)
+  try {
+    await generarCotizacion(); // función global definida en /js/cotizar.js
+  } catch (e) {
+    console.error("Error al generar la cotización en backend:", e);
+    alert("Hubo un problema generando la cotización en el servidor.");
+    return;
+  }
+
+  // 2. Guardar la cotización que irá al carrito (para mostrarla en carrito.html)
+  localStorage.setItem("cotizacionCarrito", JSON.stringify(datos));
+
+  // 3. Opcional: llevar los items de la cotización al carrito en backend
+  try {
+    const usuarioId = localStorage.getItem("usuarioId");
+    const cotizacionId = localStorage.getItem("cotizacionId"); // seteado en generarCotizacion()
+
+    if (usuarioId && cotizacionId) {
+      await fetch(`http://localhost:8080/api/carrito/${cotizacionId}/llevar-a-carrito?usuarioId=${usuarioId}`, {
+        method: "POST"
+      });
+    }
+  } catch (e) {
+    console.error("Error al llevar la cotización al carrito en backend:", e);
+    // No bloqueo la navegación; el frontend igual muestra la cotización
+  }
+
+  // 4. Redirigir al carrito
+  window.location.href = "/html/carrito.html";
+}
+
+document.getElementById("btnPagarPersona").addEventListener("click", llevarCotizacionAlCarrito);
+document.getElementById("btnPagarEmpresa").addEventListener("click", llevarCotizacionAlCarrito);
+
 
 });
 </script>
-
-
-  <!-- (Opcional) Archivo JS externo si luego quieres mover esta lógica -->
-  <!-- <script src="/js/cotizar.js"></script> -->
 </body>
 </html>

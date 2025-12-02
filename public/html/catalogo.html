@@ -36,7 +36,7 @@
 
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light px-4">
-    <img src="/img/logo.png" alt="Logo" width="50" class="me-2">
+    <img src="../img/logo.png" alt="Logo" width="50" class="me-2">
     <a class="navbar-brand fw-bold text-success" href="../html/catalogo.html">ServiObras</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
@@ -136,7 +136,7 @@
       <!-- RECEBO B-200 -->
       <div class="col-md-4 mb-5">
         <div class="card">
-          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/Diseno-sin-titulo-16.png" alt="Producto">
+          <img src="../img/Recebo_B200.png.png" alt="Producto">
           <div class="card-body">
             <h5>Recebo B-200</h5>
           </div>
@@ -146,7 +146,7 @@
       <!-- RECEBO B-400 -->
       <div class="col-md-4 mb-5">
         <div class="card">
-          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/GRAVILLA-FINA.png" alt="Producto">
+          <img src="../img/B400_0.png" alt="Producto">
           <div class="card-body">
             <h5>Recebo B-400</h5>
           </div>
@@ -156,7 +156,7 @@
       <!-- RECEBO B-600 -->
       <div class="col-md-4 mb-5">
         <div class="card">
-          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/arenapena.png" alt="Producto">
+          <img src="../img/B600_0.png" alt="Producto">
           <div class="card-body">
             <h5>Recebo B-600</h5>
           </div>
@@ -166,7 +166,7 @@
       <!-- PIEDRA RAJON -->
       <div class="col-md-4 mb-5">
         <div class="card">
-          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/ARENA-SEMI-LAVADA-DE-POZO.png" alt="Producto">
+          <img src="../img/RAJON.png" alt="Producto">
           <div class="card-body">
             <h5>Piedra Rajon</h5>
           </div>
@@ -176,7 +176,7 @@
       <!-- ESCOMBRO -->
       <div class="col-md-4 mb-5">
         <div class="card">
-          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/SEMI-LAVADA-DE-POZO-EN-LONA-.png" alt="Producto">
+          <img src="../img/escombro1.png" alt="Producto">
           <div class="card-body">
             <h5>Retiro de Escombro</h5>
           </div>
@@ -186,7 +186,7 @@
       <!-- SUBBASE -->
       <div class="col-md-4 mb-5">
         <div class="card">
-          <img src="https://agregadosalju.com/wp-content/uploads/2023/01/GRAVILLA-COMUN.png" alt="Producto">
+          <img src="../img/subbase.png" alt="Producto">
           <div class="card-body">
             <h5>SubBase</h5>
           </div>
@@ -233,27 +233,29 @@
         </p>
       </div>
       <div class="col-md-7">
-        <form>
-          <div class="row mb-3">
-            <div class="col">
-              <label class="form-label">Nombre</label>
-              <input type="text" class="form-control rounded-pill" placeholder="Nombre" />
-            </div>
-            <div class="col">
-              <label class="form-label">Apellido</label>
-              <input type="text" class="form-control rounded-pill" placeholder="Apellido" />
-            </div>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Correo electrónico</label>
-            <input type="email" class="form-control rounded-pill" placeholder="correo@ejemplo.com" />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Mensaje</label>
-            <textarea class="form-control rounded-4" rows="3"></textarea>
-          </div>
-          <button class="btn btn-green px-4">ENVIAR</button>
-        </form>
+        <form onsubmit="enviarSugerencia(event)">
+  <div class="row mb-3">
+    <div class="col">
+      <label class="form-label">Nombre</label>
+      <input id="sug-nombre" type="text" class="form-control rounded-pill" placeholder="Nombre" />
+    </div>
+    <div class="col">
+      <label class="form-label">Apellido</label>
+      <input id="sug-apellido" type="text" class="form-control rounded-pill" placeholder="Apellido" />
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Correo electrónico</label>
+    <input id="sug-correo" type="email" class="form-control rounded-pill" placeholder="correo@ejemplo.com" />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Mensaje</label>
+    <textarea id="sug-mensaje" class="form-control rounded-4" rows="3"></textarea>
+  </div>
+  <button type="submit" class="btn btn-green px-4">Enviar</button>
+</form>
       </div>
     </div>
   </section>
@@ -302,5 +304,7 @@
     }
   });
 </script>
+<script src="../js/config.js"></script>     <!-- define BASE_URL -->
+<script src="../js/Sugerencias.js"></script>
 </body>
 </html>

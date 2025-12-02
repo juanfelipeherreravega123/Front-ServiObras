@@ -1,5 +1,5 @@
 async function facturar(idCotizacion) {
-  const res = await fetch(`http://localhost:8080/api/facturacion/${idCotizacion}`, {
+  const res = await fetch(`https://serviobrass.com/api/facturacion/${idCotizacion}`, {
     method: "POST"
   });
 

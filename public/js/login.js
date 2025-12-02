@@ -1,6 +1,3 @@
-const BASE_URL = ["localhost", "127.0.0.1"].includes(window.location.hostname)
-  ? "http://localhost:8080"
-  : "https://serviobrass.com";
 
 async function login() {
   const username = document.getElementById("username").value.trim();

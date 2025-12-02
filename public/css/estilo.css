@@ -10,7 +10,7 @@ body {
 
 /* ---------- HERO PRINCIPAL ---------- */
 .hero {
-  background: url('https://www.importadoracasacolombia.com/assets/media/img-1254.jpg?u=1747692771') center center / cover no-repeat;
+  background: url('../img/cargadorINDEX.png') center center / cover no-repeat;
   height: 80vh;
   display: flex;
   align-items: center;

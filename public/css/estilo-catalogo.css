@@ -10,7 +10,7 @@ body {
 
 /* ---------- HERO PRINCIPAL ---------- */
 .hero {
-  background: url('https://www.crowe.com/co/-/media/crowe/firms/americas/co/crowehorwathco/sector-de-la-construccion-e-infraestructura-1920-1080.jpg?rev=47182f23eb5840eaa0afadbd45178c67&hash=009D777C37A1846BD3C2C94B9AEC91FD') center center / cover no-repeat;
+  background: url('../img/catalogoBack.png') center center / cover no-repeat;
   height: 80vh;
   display: flex;
   align-items: center;
